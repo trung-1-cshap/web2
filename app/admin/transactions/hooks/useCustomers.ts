@@ -11,6 +11,8 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
   const [custDate, setCustDate] = useState("");
   const [custDepositAmount, setCustDepositAmount] = useState("");
   const [custContractAmount, setCustContractAmount] = useState("");
+  const [custContractMonths, setCustContractMonths] = useState("");
+  
   const [custCommission, setCustCommission] = useState("");
 
   const [editingCustomerId, setEditingCustomerId] = useState<string | null>(null);
@@ -40,6 +42,7 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
       depositDate: custDateType === "deposit" && custDate ? new Date(custDate).toISOString() : undefined,
       depositAmount: custDateType === "deposit" && custDepositAmount ? Number(custDepositAmount) : undefined,
       contractDate: custDateType === "contract" && custDate ? new Date(custDate).toISOString() : undefined,
+      contractValidityMonths: custDateType === "contract" && custContractMonths ? Number(custContractMonths) : undefined,
       contractAmount: custDateType === "contract" && custContractAmount ? Number(custContractAmount) : undefined,
       // Lưu `commission` bất kể loại ngày (có thể nhập hoa hồng cho tiền cọc hoặc hợp đồng)
       commission: custCommission ? Math.max(0, Math.min(100, Number(custCommission))) : undefined,
@@ -47,7 +50,7 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
       performedBy: user?.name ?? "-",
     });
     setCustomers((s) => [created, ...s]);
-    setCustName(""); setCustPhone(""); setCustDate(""); setCustDateType("deposit"); setCustDepositAmount(""); setCustContractAmount(""); setCustCommission("");
+    setCustName(""); setCustPhone(""); setCustDate(""); setCustDateType("deposit"); setCustDepositAmount(""); setCustContractAmount(""); setCustContractMonths(""); setCustCommission("");
   }
 
   async function handleDeleteCustomer(id: string) {
@@ -85,6 +88,7 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
       depositDate: c.depositDate,
       depositAmount: c.depositAmount,
       contractDate: c.contractDate,
+      contractValidityMonths: (c as any).contractValidityMonths ?? undefined,
       contractAmount: c.contractAmount,
       commission: c.commission,
       note: c.note,
@@ -103,6 +107,7 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
     const payload: Partial<Customer> = { ...editCustomerData };
     if (payload.depositDate === '') delete payload.depositDate;
     if (payload.contractDate === '') delete payload.contractDate;
+    if ((payload as any).contractValidityMonths === '' || (payload as any).contractValidityMonths == null) delete (payload as any).contractValidityMonths;
     if ((payload.depositAmount === undefined) || payload.depositAmount === null) delete payload.depositAmount;
     if ((payload.contractAmount === undefined) || payload.contractAmount === null) delete payload.contractAmount;
     if ((payload.commission === undefined) || payload.commission === null) delete payload.commission;
@@ -120,7 +125,8 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
       SĐT: c.phone ?? '',
       Ngày_Cọc: c.depositDate ? new Date(c.depositDate).toLocaleDateString() : '',
       Tiền_Cọc: c.depositAmount != null ? `${c.depositAmount.toLocaleString('vi-VN')} ₫` : '',
-      Ngày_Ký_Hợp_Đồng: c.contractDate ? new Date(c.contractDate).toLocaleDateString() : '',
+      Ngày_Ký_Hợp_Đồng: c.contractDate ? new Date(c.contractDate).toLocaleString() : '',
+      
       Tiền_Hợp_Đồng: c.contractAmount != null ? `${c.contractAmount.toLocaleString('vi-VN')} ₫` : '',
       Tien_Hoa_hong: (c.commission != null && (c.contractAmount ?? c.depositAmount) != null) ? `${Math.round(((c.contractAmount ?? c.depositAmount)! * (c.commission!/100)) ).toLocaleString('vi-VN')} ₫` : '',
       Hoa_hong: c.commission != null ? `${c.commission}%` : '',
@@ -148,6 +154,7 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
           depositDate: entry.depositDate ?? undefined,
           depositAmount: entry.depositAmount ?? undefined,
           contractDate: entry.contractDate ?? undefined,
+          contractValidityMonths: (entry as any).contractValidityMonths ?? undefined,
           contractAmount: entry.contractAmount ?? undefined,
           commission: entry.commission ?? undefined,
           createdAt: entry.createdAt ?? new Date().toISOString(),
@@ -191,10 +198,13 @@ export default function useCustomers(user?: any, setFlashMsg?: (s: string | null
     setCustDateType,
     custDate,
     setCustDate,
+    
     custDepositAmount,
     setCustDepositAmount,
     custContractAmount,
     setCustContractAmount,
+    custContractMonths,
+    setCustContractMonths,
     custCommission,
     setCustCommission,
     editingCustomerId,

@@ -2,6 +2,9 @@ type Category = {
   id: string;
   name: string;
   type: "thu" | "chi";
+  contractValidity?: string; // thời gian hiệu lực của hợp đồng (chuỗi tự do)
+  contractStartDate?: string; // ISO date
+  contractEndDate?: string; // ISO date
   description?: string;
 };
 
@@ -217,6 +220,9 @@ type Customer = {
   email?: string;
   depositDate?: string; // ngày cọc (ISO)
   contractDate?: string; // ngày ký hợp đồng (ISO)
+  contractStartDate?: string; // ngày bắt đầu hiệu lực (ISO)
+  contractEndDate?: string; // ngày kết thúc hiệu lực (ISO)
+  contractValidityMonths?: number; // số tháng hiệu lực của hợp đồng
   depositAmount?: number; // tiền cọc
   contractAmount?: number; // tiền hợp đồng
   commission?: number; // hoa hồng

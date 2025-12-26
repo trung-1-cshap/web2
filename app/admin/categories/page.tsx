@@ -8,6 +8,7 @@ export default function CategoriesPage() {
   const [name, setName] = useState("");
   const [type, setType] = useState<"thu" | "chi">("thu");
   
+  
 
   useEffect(() => {
     getCategories().then((cats) => setItems((cats || []).filter((c) => (c.name || '').trim() !== 'Uncategorized')));
@@ -51,13 +52,13 @@ export default function CategoriesPage() {
       <h2 className="text-2xl font-semibold mb-4">Quản lý Danh mục</h2>
       
 
-      <form onSubmit={handleAdd} className="flex gap-2 mb-4">
-        <input className="border rounded px-3 py-2 flex-1" placeholder="Tên danh mục" value={name} onChange={(e) => setName(e.target.value)} />
-        <select className="border rounded px-3 py-2" value={type} onChange={(e) => setType(e.target.value as any)}>
+      <form onSubmit={handleAdd} className="flex flex-wrap gap-2 mb-4 items-center">
+        <input className="border rounded px-3 py-2 flex-1 min-w-[160px]" placeholder="Tên danh mục" value={name} onChange={(e) => setName(e.target.value)} />
+        <select className="border rounded px-3 py-2 w-full sm:w-auto" value={type} onChange={(e) => setType(e.target.value as any)}>
           <option value="thu">Thu</option>
           <option value="chi">Chi</option>
         </select>
-        <button className="bg-slate-800 text-white px-4 py-2 rounded">Thêm</button>
+        <button className="bg-slate-800 text-white px-4 py-2 rounded w-full sm:w-auto">Thêm</button>
       </form>
 
       <div className="bg-white border rounded">
@@ -66,6 +67,7 @@ export default function CategoriesPage() {
             <tr>
               <th className="text-left p-3">Tên</th>
               <th className="text-left p-3">Loại</th>
+              
               <th className="p-3">Hành động</th>
             </tr>
           </thead>
@@ -82,6 +84,6 @@ export default function CategoriesPage() {
           </tbody>
         </table>
       </div>
-    </div>
+    </div> 
   );
 }

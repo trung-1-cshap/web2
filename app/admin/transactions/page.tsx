@@ -36,6 +36,8 @@ export default function TransactionsPage() {
     setCustDepositAmount,
     custContractAmount,
     setCustContractAmount,
+    custContractMonths,
+    setCustContractMonths,
     custCommission,
     setCustCommission,
     editingTransactionId,
@@ -130,6 +132,8 @@ export default function TransactionsPage() {
           setCustDepositAmount={setCustDepositAmount}
           custContractAmount={custContractAmount}
           setCustContractAmount={setCustContractAmount}
+          custContractMonths={custContractMonths}
+          setCustContractMonths={setCustContractMonths}
           custCommission={custCommission}
           setCustCommission={setCustCommission}
           handleAddCustomer={handleAddCustomer}
