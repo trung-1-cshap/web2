@@ -22,6 +22,7 @@ function setCookie(name: string, value: string, days = 7) {
   const expires = new Date();
   expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
   document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/`;
+  try { localStorage.setItem(name, value); } catch (e) {}
 }
 
 function getCookie(name: string) {
@@ -34,6 +35,7 @@ function getCookie(name: string) {
 function deleteCookie(name: string) {
   if (typeof document === 'undefined') return;
   document.cookie = `${name}=; Max-Age=0; path=/`;
+  try { localStorage.removeItem(name); } catch (e) {}
 }
 
 // bộ kiểm tra (validators)
@@ -100,8 +102,16 @@ export function logoutMock() {
 export function getStoredUser(): User | null {
   try {
     const raw = getCookie(CURRENT_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as User;
+    // Debug: log raw cookie value to help trace refresh/auth persistence issues
+    try { /* eslint-disable-next-line no-console */ console.debug('[auth] getStoredUser raw cookie:', raw); } catch (e) {}
+    let source = raw;
+    if (!source && typeof localStorage !== 'undefined') {
+      try { source = localStorage.getItem(CURRENT_KEY); /* eslint-disable-next-line no-console */ console.debug('[auth] fallback localStorage raw:', source); } catch (e) { source = null; }
+    }
+    if (!source) return null;
+    const parsed = JSON.parse(source) as User;
+    try { /* eslint-disable-next-line no-console */ console.debug('[auth] getStoredUser parsed:', parsed); } catch (e) {}
+    return parsed;
   } catch (e) {
     return null;
   }

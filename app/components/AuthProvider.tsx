@@ -23,7 +23,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     try { ensureClientSeedAdmin(); } catch (e) {}
+    try {
+      // Debug: log cookie and stored user on mount to help diagnose refresh logout issue
+      // (remove these logs once issue resolved)
+      // eslint-disable-next-line no-console
+      console.debug('[AuthProvider] document.cookie:', typeof document !== 'undefined' ? document.cookie : '<ssr>');
+    } catch (e) {}
     const u = getStoredUser();
+    // eslint-disable-next-line no-console
+    console.debug('[AuthProvider] getStoredUser ->', u);
     setUser(u);
   }, []);
 
