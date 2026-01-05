@@ -13,7 +13,16 @@ let categories: Category[] = [];
 export function getCategories(): Promise<Category[]> {
   // lấy từ API nếu có
   if (typeof window !== 'undefined') {
-    return fetch('/api/categories').then((r) => r.json())
+    return fetch('/api/categories').then(async (r) => {
+      const text = await r.text().catch(() => '')
+      let json: any = null
+      try { json = text ? JSON.parse(text) : null } catch { json = { _raw: text } }
+      if (!r.ok) {
+        console.error('getCategories failed', { status: r.status, statusText: r.statusText, body: json })
+        return [] as Category[]
+      }
+      return Array.isArray(json) ? json : []
+    })
   }
   return Promise.resolve([...categories]);
 }
@@ -239,7 +248,16 @@ let customers: Customer[] = [];
 
 export function getCustomers(): Promise<Customer[]> {
   if (typeof window !== 'undefined') {
-    return fetch('/api/customers').then((r) => r.json())
+    return fetch('/api/customers').then(async (r) => {
+      const text = await r.text().catch(() => '')
+      let json: any = null
+      try { json = text ? JSON.parse(text) : null } catch { json = { _raw: text } }
+      if (!r.ok) {
+        console.error('getCustomers failed', { status: r.status, statusText: r.statusText, body: json })
+        return [] as Customer[]
+      }
+      return Array.isArray(json) ? json : []
+    })
   }
   return Promise.resolve([...customers]);
 }

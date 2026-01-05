@@ -17,6 +17,7 @@ type Props = {
   saveEditTransaction: () => Promise<void>;
   toggleTransactionReceived: (id: string, val: boolean) => Promise<void>;
   handleDelete: (id: string) => Promise<void>;
+  handleApprove?: (id: string) => Promise<void> | void;
 };
 
 export default function TransactionsTable({ items, categories, user, editingTransactionId, editTransactionData, setEditTransactionData, startEditTransaction, cancelEditTransaction, saveEditTransaction, toggleTransactionReceived, handleDelete, handleApprove }: Props) {

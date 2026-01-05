@@ -13,6 +13,7 @@ type Props = {
   startEditTransaction: (t: Transaction) => void;
   handleDelete: (id: string) => Promise<void> | void;
   toggleTransactionReceived: (id: string, val: boolean) => Promise<void> | void;
+  handleApprove?: (id: string) => Promise<void> | void;
   toggleCustomerReceived: (id: string, val: boolean) => Promise<void> | void;
 };
 
